@@ -36,17 +36,18 @@ class StanfordCoreNLP:
                 pass
         return output
 
-    def tokensregex(self, text, pattern, filter):
-        return self.regex('/tokensregex', text, pattern, filter)
+    def tokensregex(self, text, pattern, filter=False, case_sensitive=True):
+        return self.regex('/tokensregex', text, pattern, filter, case_sensitive)
 
     def semgrex(self, text, pattern, filter):
         return self.regex('/semgrex', text, pattern, filter)
 
-    def regex(self, endpoint, text, pattern, filter):
+    def regex(self, endpoint, text, pattern, filter=False, case_sensitive=True):
         r = requests.get(
             self.server_url + endpoint, params={
                 'pattern':  pattern,
-                'filter': filter
+                'filter': filter,
+                'case-sensitive': case_sensitive
             }, data=text)
         output = r.text
         try:
