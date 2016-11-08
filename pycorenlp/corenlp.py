@@ -48,7 +48,7 @@ class StanfordCoreNLP:
     def regex(self, endpoint, text, pattern, filter=False, case_sensitive=True):
         # pattern expression needs to be made safe by escaping special
         # characters. Special characters that don't cause problems are marked
-        # save to keep pattern length below maximum.
+        # safe to keep pattern length below maximum.
         pattern = urllib.quote(pattern, safe='/?:.*(){}|+ ')
 
         # send request to CoreNLP Server
