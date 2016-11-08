@@ -1,4 +1,7 @@
-import json, requests
+import json
+import requests
+import urllib
+
 
 class StanfordCoreNLP:
 
@@ -43,6 +46,12 @@ class StanfordCoreNLP:
         return self.regex('/semgrex', text, pattern, filter)
 
     def regex(self, endpoint, text, pattern, filter=False, case_sensitive=True):
+        # pattern expression needs to be made safe by escaping special
+        # characters. Special characters that don't cause problems are marked
+        # save to keep pattern length below maximum.
+        pattern = urllib.quote(pattern, safe='/?:.*(){}|+ ')
+
+        # send request to CoreNLP Server
         r = requests.get(
             self.server_url + endpoint, params={
                 'pattern':  pattern,
