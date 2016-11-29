@@ -11,7 +11,7 @@ class StanfordCoreNLP:
         self.server_url = server_url
 
     def annotate(self, text, properties=None):
-        assert isinstance(text, str)
+        assert isinstance(text, basestring)
         if properties is None:
             properties = {}
         else:
@@ -25,7 +25,7 @@ class StanfordCoreNLP:
             '$ cd stanford-corenlp-full-2015-12-09/ \n'
             '$ java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer')
 
-        data = text.encode()
+        data = urllib.quote(text.encode('utf8'), safe='/?:.*(){}|+ ')
         r = requests.post(
             self.server_url, params={
                 'properties': str(properties)
@@ -49,7 +49,8 @@ class StanfordCoreNLP:
         # pattern expression needs to be made safe by escaping special
         # characters. Special characters that don't cause problems are marked
         # safe to keep pattern length below maximum.
-        pattern = urllib.quote(pattern, safe='/?:.*(){}|+ ')
+        pattern = urllib.quote(pattern.encode('utf8'), safe='/?:.*(){}|+ ')
+        text = urllib.quote(text.encode('utf8'), safe='/?:.*(){}|+ ')
 
         # send request to CoreNLP Server
         r = requests.get(
